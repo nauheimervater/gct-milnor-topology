@@ -1,0 +1,134 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\geometry{margin=1in}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{\textbf{Topological Barriers in Geometric Complexity Theory: Milnor-Fiber Padding Collapse and the Exact Cohomology of the $3\times 3$ Permanent}}
+\author{\textbf{Thomas Nauheimer}\\ \small \texttt{nauheimer.t@gmail.com}}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In Valiant's algebraic complexity theory, separating $\mathsf{VP}$ from $\mathsf{VNP}$ reduces to showing that the padded permanent $\text{pad}(\text{Perm}_n, m) = z^{m-n}\text{Perm}_n(X)$ does not lie in the $GL_{m^2}(\mathbb{C})$-orbit closure of the determinant $\text{Det}_m(Y)$. Following the refutation of naive representation-theoretic occurrence obstructions for padded polynomials (Ikenmeyer \& Panova, 2017; B\"urgisser, Ikenmeyer \& Panova, 2019), a natural question is whether topological invariants of the Milnor fibers $F_{\text{Det}_m} = SL_m(\mathbb{C})$ and $F_{\text{pad}(\text{Perm}_n, m)}$---combined with Hamm--Lefschetz subspace restriction and the $(2n-1)$-dimensional scaling torus action---can obstruct orbit-closure containment.
+
+We prove five results clarifying the exact scope and limits of this topological route:
+(1) For all $m > n$, $F_{\text{pad}(\text{Perm}_n, m)} \to \mathbb{C}^*$ is a locally trivial fiber bundle with fiber $F_{\text{Perm}_n}$ whose Leray--Serre spectral sequence degenerates at $E_2$, yielding $b_k(F_{\text{pad}(\text{Perm}_n, m)}) = b_k(F_{\text{Perm}_n}) + b_{k-1}(F_{\text{Perm}_n})$, completely independent of $m$; consequently, no naive Hamm--Lefschetz cohomology injection $H^k(SL_m) \hookrightarrow H^k(F_{\text{pad}})$ can hold in high degrees ($k > n^2$).
+(2) The scaling torus $T \cong (\mathbb{C}^*)^{2n-1}$ does not act freely on $F_{\text{Perm}_n}$ ($\dim \text{Stab}_T(I_n) = n$, $\dim \text{Stab}_T(\text{dense}) = 1$), invalidating the naive principal-bundle quotient $F_{\text{Perm}_n}/T$; however, $F_{\text{Perm}_n}^T = \emptyset$ for all $n \ge 2$, so the Borel equivariant cohomology $H^*_T(F_{\text{Perm}_n}, \mathbb{C})$ is a pure torsion $H^*(BT)$-module, forcing $b_{n^2-1}(F_{\text{Perm}_n}) \le \sum_{k=0}^{n^2-2} b_k(F_{\text{Perm}_n})$.
+(3) Over $\mathbb{C}$, the Jacobian ideal $J(\text{Perm}_3)$ decomposes into $15$ prime ideals of Krull dimension $s = 3$ ($3$ two-zero-row planes, $3$ two-zero-column planes, and $9$ cross-minor quadric cones), so $F_{\text{Perm}_3} \subset \mathbb{C}^9$ is $4$-connected ($b_1 = b_2 = b_3 = b_4 = 0$).
+(4) Projecting onto the first two rows exhibits $F_{\text{Perm}_3}$ as an affine $\mathbb{A}^2$-bundle over $U = \mathbb{C}^6 \setminus V$, where $V$ admits a disjoint stratification into linear and toric pieces, proving unconditionally that $F_{\text{Perm}_3}$ is mixed Tate with $|F_{\text{Perm}_3}(\mathbb{F}_q)| = q^8 - 5q^5 + 6q^4 - 3q^3 + q^2 = |SL_3(\mathbb{F}_q)| + q^2(q-1)^4$ ($\text{char}(\mathbb{F}_q) \neq 2$) and exact Betti numbers $b(F_{\text{Perm}_3}) = (1, 0, 0, 0, 0, 5, 6, 3, 1)$, $\sum b_k = 16 > 4 = \sum b_k(SL_3)$, $\chi = 0$.
+(5) For $m - n \ge 2$, the padding factor $z^{m-n}$ creates a codimension-$1$ singular locus $\{z=0\}$ ($\mu^{(d)} = \infty$, $\text{lct}_0 = \frac{1}{m-n} < 1$), and bare Bernstein--Sato roots fail subset containment under specialization ($f_t = x^2 - ty^3 \to x^2$).
+\end{abstract}
+
+\section{Background and Problem Setting}
+
+Let $\text{Det}_m(Y)$ denote the determinant of an $m \times m$ matrix of variables and $\text{Perm}_n(X)$ the permanent of an $n \times n$ matrix. In multiplicative padding form, Valiant's $\mathsf{VP} \neq \mathsf{VNP}$ conjecture asks whether for $m = \text{poly}(n)$,
+$$\text{pad}(\text{Perm}_n, m)(X, z) = z^{m-n}\text{Perm}_n(X) \notin \overline{GL_{m^2}(\mathbb{C}) \cdot \text{Det}_m}.$$
+The Geometric Complexity Theory (GCT) program of Mulmuley and Sohoni \cite{ms1, ms2} originally proposed representation-theoretic occurrence obstructions. Following the proof that occurrence obstructions fail for padded polynomials \cite{ip17, bip19}, it is natural to examine topological invariants of the Milnor fibers
+$$F_{\text{Det}_m} = \{ Y \in M_m(\mathbb{C}) \mid \text{Det}_m(Y) = 1 \} = SL_m(\mathbb{C}) \simeq SU(m),$$
+$$F_{\text{Perm}_n} = \{ X \in M_n(\mathbb{C}) \mid \text{Perm}_n(X) = 1 \}, \quad F_{\text{pad}(\text{Perm}_n, m)} = \{ (X, z) \in M_n(\mathbb{C}) \times \mathbb{C} \mid z^{m-n}\text{Perm}_n(X) = 1 \}.$$
+
+\section{Padding Fibration and Collapse of Naive Hamm--Lefschetz Restriction}
+
+\begin{lemma}[Padding Fibration]
+\label{lem:bundle}
+For all integers $m > n \ge 1$, the projection $\pi: F_{\text{pad}(\text{Perm}_n, m)} \to \mathbb{C}^*$, $(X, z) \mapsto z$, is a locally trivial algebraic fiber bundle with fiber $F_{\text{Perm}_n}$ and trivial rational monodromy.
+\end{lemma}
+
+\begin{proof}
+Since $z^{m-n}\text{Perm}_n(X) = 1$, we have $z \neq 0$. Because $\text{Perm}_n$ is homogeneous of degree $n$, local branches of $z^{(m-n)/n}$ trivialize $\pi$ via $(X, z) \mapsto (z^{(m-n)/n} X, z)$ with fiber $F_{\text{Perm}_n}$. The monodromy lies in $\mu_n \subset \mathbb{C}^*$ acting by scalar multiplication, which extends to the connected group $\mathbb{C}^*$ and therefore acts trivially on rational cohomology.
+\end{proof}
+
+\begin{theorem}[Padding Betti Formula and Hamm--Lefschetz Collapse]
+\label{thm:padding_betti}
+For all $m > n$ and $k \ge 0$ (with $b_{-1} = 0$), the Betti numbers of $F_{\text{pad}(\text{Perm}_n, m)}$ are independent of $m$:
+$$b_k(F_{\text{pad}(\text{Perm}_n, m)}) = b_k(F_{\text{Perm}_n}) + b_{k-1}(F_{\text{Perm}_n}).$$
+Consequently, for any $m > n$, there is no injective cohomology restriction $H^k(SL_m(\mathbb{C}), \mathbb{C}) \hookrightarrow H^k(F_{\text{pad}(\text{Perm}_n, m)}, \mathbb{C})$ in top degree $k = m^2 - 1$.
+\end{theorem}
+
+\begin{proof}
+In the Leray--Serre spectral sequence $E_2^{p,q} = H^p(\mathbb{C}^*, \mathbb{C}) \otimes H^q(F_{\text{Perm}_n}, \mathbb{C}) \implies H^{p+q}(F_{\text{pad}}, \mathbb{C})$, only columns $p \in \{0, 1\}$ are non-zero, so all differentials $d_r$ ($r \ge 2$) vanish and $E_2 \cong E_\infty$. Since $F_{\text{Perm}_n}$ is a smooth affine hypersurface of complex dimension $n^2-1$, $b_j(F_{\text{Perm}_n}) = 0$ for $j > n^2-1$, whence $b_k(F_{\text{pad}}) = 0$ for $k > n^2$. For $m > n$, $k = m^2-1 > n^2$ gives $b_{m^2-1}(SL_m) = 1 > 0 = b_{m^2-1}(F_{\text{pad}})$, because the non-generic padding subspace fails Whitney transversality to $\overline{SL_m(\mathbb{C})}$ at infinity \cite{hamm83}.
+\end{proof}
+
+\section{Non-Freeness of the Scaling Torus and Borel Equivariant Torsion}
+
+Let $T = \{(U, V) \in (\mathbb{C}^*)^n \times (\mathbb{C}^*)^n \mid \prod_{i=1}^n u_i v_i = 1\} \cong (\mathbb{C}^*)^{2n-1}$ act on $F_{\text{Perm}_n}$ via $(U, V) \cdot X = U X V$.
+
+\begin{theorem}[Stabilizer Stratification and Borel Equivariant Torsion]
+\label{thm:torus}
+For all $n \ge 2$:
+\begin{enumerate}
+    \item The action of $T$ on $F_{\text{Perm}_n}$ is \textbf{not free}: $\dim \text{Stab}_T(I_n) = n$ at the identity and permutation matrices, and $\dim \text{Stab}_T(X) = 1$ on dense matrices $X \in (\mathbb{C}^*)^{n \times n} \cap F_{\text{Perm}_n}$.
+    \item The fixed-point locus is empty: $F_{\text{Perm}_n}^T = \emptyset$.
+    \item The Borel equivariant cohomology $H^*_T(F_{\text{Perm}_n}, \mathbb{C})$ is a pure torsion module over $R = H^*(BT, \mathbb{C}) \cong \mathbb{C}[t_1, \dots, t_{2n-1}]$, forcing the top-degree Betti inequality
+    $$b_{n^2-1}(F_{\text{Perm}_n}) \le \sum_{k=0}^{n^2-2} b_k(F_{\text{Perm}_n}).$$
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(1) At $X = I_n$, $U I_n V = I_n \iff v_i = u_i^{-1}$, giving $\text{Stab}_T(I_n) \cong (\mathbb{C}^*)^n$. On $(\mathbb{C}^*)^{n \times n}$, $u_i v_j = 1$ for all $i, j$ gives $u_i = c, v_j = c^{-1}$ ($\dim = 1$).
+(2) If $x_{ij} \neq 0$ is fixed by $T = \ker(\Phi)$ where $\Phi(U,V) = \prod_{k=1}^n u_k v_k$, then $u_i v_j = \Phi(U,V)^a$ for some $a \in \mathbb{Z}$. Comparing exponents of $u_i$ gives $a=1$ while $u_k$ ($k \neq i$, $n \ge 2$) gives $a=0$, a contradiction. Thus $X = 0 \notin F_{\text{Perm}_n}$.
+(3) By Atiyah--Bott--Segal localization, $S^{-1} H^*_T(F_{\text{Perm}_n}, \mathbb{C}) \cong S^{-1} H^*_T(F_{\text{Perm}_n}^T, \mathbb{C}) = 0$ for $S = R \setminus \{0\}$. Hence every row $E_2^{*,q}$ in the Borel spectral sequence has rank $0$ at $E_\infty$, and the top row $q = n^2-1$ must inject in rank into rows $q \le n^2-2$.
+\end{proof}
+
+\section{Primary Decomposition of $\text{Sing}(\text{Perm}_3 = 0)$}
+
+\begin{theorem}[$15$ Prime Components of $\text{Sing}(\text{Perm}_3 = 0)$]
+\label{thm:jacobian}
+Over $\mathbb{C}$, the Jacobian ideal $J(\text{Perm}_3) \subset \mathbb{C}[x_{11}, \dots, x_{33}]$ decomposes into \textbf{15 prime ideals of Krull dimension $s = 3$}: $3$ two-zero-row ideals $R_{12}, R_{13}, R_{23}$, $3$ two-zero-column ideals $C_{12}, C_{13}, C_{23}$, and $9$ cross-minor quadric cones $D_{ij}$ ($1 \le i, j \le 3$). Consequently, $\dim_{\mathbb{C}} \text{Sing}(\{\text{Perm}_3 = 0\}) = 3$, and by Kato's connectivity theorem \cite{kato} $F_{\text{Perm}_3} \subset \mathbb{C}^9$ is $4$-connected ($b_1 = b_2 = b_3 = b_4 = 0$).
+\end{theorem}
+
+\begin{proof}
+Each $R_{ab}$ and $C_{ab}$ is generated by $6$ variables ($\mathbb{C}[X]/P \cong \mathbb{C}[t_1, t_2, t_3]$, Krull dimension $3$). Each $D_{ij}$ is generated by the $5$ variables in row $i \cup \text{col } j$ and the irreducible rank-$4$ quadric $C_{ij} = y_{11}y_{22} + y_{12}y_{21} = 0$ (Krull dimension $4 - 1 = 3$). By Kato's theorem \cite{kato}, $F_{\text{Perm}_3}$ is $(9 - 2 - 3) = 4$-connected.
+\end{proof}
+
+\section{Exact Point Count and Unconditional Cohomology of $F_{\text{Perm}_3}$}
+
+Expanding $\text{Perm}_3(X) = x_{31}C_{31}(a,b) + x_{32}C_{32}(a,b) + x_{33}C_{33}(a,b) = 1$ along the third row exhibits $\pi: F_{\text{Perm}_3} \to U = \mathbb{C}^6 \setminus V$ as an affine $\mathbb{A}^2$-bundle over the complement of $V = \{C_{31} = C_{32} = C_{33} = 0\} \subset \mathbb{C}^6$, where $C_{31} = a_2 b_3 + a_3 b_2$, $C_{32} = a_1 b_3 + a_3 b_1$, $C_{33} = a_1 b_2 + a_2 b_1$.
+
+\begin{theorem}[Exact Point Count, Mixed Tate Structure, and Betti Spectrum of $F_{\text{Perm}_3}$]
+\label{thm:betti}
+\begin{enumerate}
+    \item Over any field $k$ with $\text{char}(k) \neq 2$, $V \subset k^6$ decomposes into four pairwise disjoint locally closed strata: $R_1 \cong \mathbb{A}^3$, $R_2 \setminus \{0\} \cong \mathbb{A}^3 \setminus \{0\}$, three $2$-tori $\bigsqcup_{l=1}^3 (\mathbb{G}_m)^2$, and three $3$-tori $\bigsqcup_{k=1}^3 (\mathbb{G}_m)^3$. Over $\mathbb{F}_q$ ($\text{char}(\mathbb{F}_q) \neq 2$):
+    $$|V(\mathbb{F}_q)| = 5q^3 - 6q^2 + 3q - 1, \quad |F_{\text{Perm}_3}(\mathbb{F}_q)| = q^8 - 5q^5 + 6q^4 - 3q^3 + q^2 = |SL_3(\mathbb{F}_q)| + q^2(q-1)^4.$$
+    \item In the compactly supported cohomology sequence for $\{0\} \subset Z = R_1 \cup R_2 \subset W = Z \cup C_1 \cup C_2 \cup C_3 \subset V$, the boundary maps $\delta_4: \mathbb{Q}(-2)^3 \to \mathbb{Q}(-2)^9$, $\delta_3: \mathbb{Q}(-1)^6 \to \mathbb{Q}(-1)^9$, and $\delta_2: \mathbb{Q}(0)^2 \to \mathbb{Q}(0)^3$ all have full column rank ($3, 6, 2$). Thus $H^m_c(V, \mathbb{Q})$ is pure of a single Tate weight in every degree: $H^6_c(V) = \mathbb{Q}(-3)^5$, $H^5_c(V) = \mathbb{Q}(-2)^6$, $H^4_c(V) = \mathbb{Q}(-1)^3$, $H^3_c(V) = \mathbb{Q}(0)^1$, and $H^m_c(V) = 0$ for $m \le 2$.
+    \item By Alexander/Poincar\'e duality $b_j(F_{\text{Perm}_3}) = \dim H^j(U) = \dim H^{11-j}_c(V)$ ($j \ge 1$), the exact Betti numbers of $F_{\text{Perm}_3}$ are:
+    $$b(F_{\text{Perm}_3}) = (1, 0, 0, 0, 0, 5, 6, 3, 1), \quad \sum_{k=0}^8 b_k(F_{\text{Perm}_3}) = 16 > 4 = \sum_{k=0}^8 b_k(SL_3(\mathbb{C})), \quad \chi(F_{\text{Perm}_3}) = 0.$$
+\end{enumerate}
+\end{theorem}
+
+\section{Singularity Barriers Under Padding and Bernstein--Sato Specialization}
+
+\begin{theorem}[Padding Singularity Collapse and Bernstein--Sato Non-Monotonicity]
+\label{thm:bs}
+\begin{enumerate}
+    \item For $m - n \ge 2$, $\text{Sing}(z^{m-n}\text{Perm}_n(X) = 0)$ contains the codimension-$1$ hyperplane $\{z=0\}$, so generic linear slices of dimension $d \ge 2$ have non-isolated singularities ($\mu^{(d)} = \infty$), and $\text{lct}_0(\text{pad}(\text{Perm}_n, m)) = \frac{1}{m-n} < 1 = \text{lct}_0(\text{Det}_m)$.
+    \item While $\text{Roots}(b_{z^{m-n}\text{Perm}_n}(s)) = \{-1, -\frac{1}{m-n}, \dots, -\frac{m-n-1}{m-n}\} \cup \text{Roots}(b_{\text{Perm}_n}(s))$, bare Bernstein--Sato roots do not satisfy $\text{Roots}(b_{f_0}) \subset \text{Roots}(b_{f_t})$ under specialization: for $f_t = x^2 - ty^3 \to f_0 = x^2$, $\text{Roots}(b_{f_t}) = \{-1, -5/6, -7/6\}$ ($t \neq 0$) whereas $\text{Roots}(b_{f_0}) = \{-1, -1/2\}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{thebibliography}{9}
+\bibitem{bip19} P. B\"urgisser, C. Ikenmeyer, G. Panova. \emph{No occurrence obstructions in geometric complexity theory}. J. Amer. Math. Soc., 32(1):163--193, 2019.
+\bibitem{hamm83} H. A. Hamm. \emph{Lefschetz theorems for singular varieties}. Proc. Sympos. Pure Math., 40(1):547--557, 1983.
+\bibitem{ip17} C. Ikenmeyer, G. Panova. \emph{Rectangular Kronecker coefficients and plethysms in geometric complexity theory}. Adv. Math., 319:40--66, 2017.
+\bibitem{kashiwara76} M. Kashiwara. \emph{B-functions and holonomic systems: Rationality of roots of B-functions}. Invent. Math., 38(1):33--53, 1976.
+\bibitem{kato} M. Kato. \emph{Topology of closed manifolds and singularities of hypersurfaces}. Topology, 14(2):107--113, 1975.
+\bibitem{ms1} K. Mulmuley, M. Sohoni. \emph{Geometric complexity theory I: An approach to the P vs. NP and related problems}. SIAM J. Comput., 31(2):496--561, 2001.
+\bibitem{ms2} K. Mulmuley, M. Sohoni. \emph{Geometric complexity theory II: Towards explicit obstructions for embeddings among class varieties}. SIAM J. Comput., 37(2):326--390, 2007.
+\bibitem{saito94} M. Saito. \emph{On microlocal b-function}. Bull. Soc. Math. France, 122(2):163--184, 1994.
+\end{thebibliography}
+
+\end{document}

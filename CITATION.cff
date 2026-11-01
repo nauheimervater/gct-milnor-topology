@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software or paper, please cite it as below."
+authors:
+  - family-names: "Nauheimer"
+    given-names: "Thomas"
+    email: "nauheimer.t@gmail.com"
+title: "Topological Barriers in Geometric Complexity Theory: Milnor-Fiber Padding Collapse and the Exact Cohomology of the 3x3 Permanent"
+version: 1.0.0
+date-released: 2026-11-01
+url: "https://github.com/nauheimervater/gct-milnor-topology"
+repository-code: "https://github.com/nauheimervater/gct-milnor-topology"
+license: MIT
+keywords:
+  - geometric complexity theory
+  - algebraic complexity
+  - permanent vs determinant
+  - Milnor fiber
+  - stratified cohomology
+  - étale cohomology
